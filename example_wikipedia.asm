@@ -1,3 +1,5 @@
+; Prompt for a character on stdin and show it
+
 BITS 64
 CPU X64
 
