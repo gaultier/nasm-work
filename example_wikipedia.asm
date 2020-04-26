@@ -31,6 +31,7 @@ section .text
 
 _start:
 
+        ; show prompt
         write stdout, query_string, query_string_len
 
 	; read in the character
@@ -40,18 +41,11 @@ _start:
 	mov	rdx, 2				; get 2 bytes from the kernel's buffer (one for the carriage return)
 	syscall
 
-	; show user the output
-	mov	rax, 0x2000004		; write system call
-	mov	rdi, 1				; stdout
-	mov	rsi, out_string
-	mov	rdx, out_string_len
-	syscall
 
-	mov	rax, 0x2000004		; write system call
-	mov	rdi, 1				; stdout
-	mov	rsi, in_char
-	mov	rdx, 2				; the second byte is to apply the carriage return expected in the string
-	syscall
+	; show user the output
+        write stdout, out_string, out_string_len
+        write stdout, in_char, 2 ; the second byte is to apply the carriage return expected in the string
+
 
 	; exit system call
 	mov	rax, 0x2000001		; exit system call
