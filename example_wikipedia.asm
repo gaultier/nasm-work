@@ -42,6 +42,11 @@ DEFAULT REL
     syscall
 %endmacro
 
+%macro int_to_string 2
+        mov [%2], %1
+        add [%2], BYTE 48
+%endmacro
+
 global _start
 
 section .data
@@ -65,12 +70,13 @@ _start:
 
 	; read in the character
         read stdin, in_char, 5 ; get 5 bytes from the kernel's buffer (one for the carriage return)
+        mov r8, rax ; remember how many bytes were read
+
 	; show user the output
         write stdout, out_string, out_string_len
         write stdout, in_char, 5
 
-        add rax, BYTE 60
-        mov [in_char], rax
+        int_to_string r8, in_char
         write stdout, in_char, 1
 
 	exit 0
