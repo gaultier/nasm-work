@@ -60,6 +60,11 @@ sum:
     mov rax, rdi
     ret
 
+int_to_char:
+    add rdi, '0'
+    mov rax, rdi
+    ret
+
 global _start
 
 section .data
@@ -104,8 +109,8 @@ _start:
         ;mov [in_char_string + 2], BYTE 0
         ;mov [in_char_string + 3], BYTE 0
         ;mov [in_char_string + 4], BYTE 0
-        mov rdi, 55
-        call sum
+        mov rdi, 5
+        call int_to_char
         mov [in_char_string], rax
         write stdout, in_char_string, 1
 
