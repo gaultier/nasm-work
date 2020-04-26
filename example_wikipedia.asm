@@ -4,8 +4,9 @@ CPU X64
 
 %define stdin 0
 %define stdout 1
-%define syscall_write 0x2000004
+%define syscall_exit 0x2000001
 %define syscall_read 0x2000003
+%define syscall_write 0x2000004
 
 ; Analog to write(2): ssize_t write(int fildes, const void *buf, size_t nbyte);
 %macro write 3
@@ -51,6 +52,6 @@ _start:
         write stdout, in_char, 2 ; the second byte is to apply the carriage return expected in the string
 
 	; exit system call
-	mov	rax, 0x2000001		; exit system call
+	mov	rax, syscall_exit
 	xor     rdi, rdi
 	syscall
