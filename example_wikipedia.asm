@@ -2,6 +2,7 @@
 
 BITS 64
 CPU X64
+DEFAULT REL
 
 
 %define stdin 0
@@ -18,7 +19,8 @@ CPU X64
     mov rsi, %2
     mov rdx, %3
     syscall
-    cmp rax, 2
+    mov rdx, rax,
+    cmp rdx, 0
     jl error
 %endmacro
 
@@ -30,7 +32,7 @@ CPU X64
     mov rdx, %3
     syscall
     mov rdx, rax,
-    cmp rax, 0
+    cmp rdx, 0
     jl error
 %endmacro
 
@@ -66,6 +68,10 @@ _start:
 	; show user the output
         write stdout, out_string, out_string_len
         write stdout, in_char, 5
+
+        add rax, BYTE 60
+        mov [in_char], rax
+        write stdout, in_char, 1
 
 	exit 0
 
