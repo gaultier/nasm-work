@@ -60,9 +60,10 @@ sum:
     mov rax, rdi
     ret
 
-int_to_char:
+set_int_to_char:
     add rdi, '0'
     mov rax, rdi
+    mov [rsi], rax
     ret
 
 global _start
@@ -110,8 +111,8 @@ _start:
         ;mov [in_char_string + 3], BYTE 0
         ;mov [in_char_string + 4], BYTE 0
         mov rdi, 5
+        mov rsi, in_char_string
         call int_to_char
-        mov [in_char_string], rax
         write stdout, in_char_string, 1
 
 	exit 0
