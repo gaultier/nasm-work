@@ -6,6 +6,7 @@ CPU X64
 
 %define stdin 0
 %define stdout 1
+%define stderr 2
 %define syscall_exit 0x2000001
 %define syscall_read 0x2000003
 %define syscall_write 0x2000004
@@ -36,6 +37,8 @@ section .data
 	query_string_len:	equ	$ - query_string
 	out_string:			db	"You have input:  "
 	out_string_len:		equ	$ - out_string
+        err_string: db "Error with syscall"
+        err_string_len equ $- err_string
 
 section .bss
 
@@ -49,6 +52,8 @@ _start:
 
 	; read in the character
         read stdin, in_char, 5 ; get 5 bytes from the kernel's buffer (one for the carriage return)
+        cmp rax, 2
+        jl error
 	; show user the output
         write stdout, out_string, out_string_len
         write stdout, in_char, 5
@@ -57,3 +62,10 @@ _start:
 	mov	rax, syscall_exit
 	xor     rdi, rdi
 	syscall
+
+error:
+    write stderr, err_string, err_string_len
+    ; exit system call
+    mov	rax, syscall_exit
+    xor     rdi, rdi
+    syscall
