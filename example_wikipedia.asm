@@ -1,6 +1,19 @@
 BITS 64
 CPU X64
 
+
+%define stdout 1
+%define syscall_write 0x2000004
+
+; Analog to write(2): ssize_t write(int fildes, const void *buf, size_t nbyte);
+%macro write 3
+    mov rax, syscall_write
+    mov rdi, %1
+    mov rsi, %2
+    mov rdx, %3
+    syscall
+%endmacro
+
 global _start
 
 section .data
@@ -18,11 +31,7 @@ section .text
 
 _start:
 
-	mov	rax, 0x2000004	 	; put the write-system-call-code into register rax
-	mov	rdi, 1				; tell kernel to use stdout
-	mov	rsi, query_string	; rsi is where the kernel expects to find the address of the message
-	mov	rdx, query_string_len	; and rdx is where the kernel expects to find the length of the message 
-	syscall
+        write stdout, query_string, query_string_len
 
 	; read in the character
 	mov	rax, 0x2000003		; read system call
