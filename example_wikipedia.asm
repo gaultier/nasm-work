@@ -42,10 +42,18 @@ DEFAULT REL
     syscall
 %endmacro
 
-%macro int_to_string 2
-        mov [%2], %1
-        add [%2], BYTE 48
-%endmacro
+; rdi=n 
+; rsi=res string 
+; rdx = res string len
+uint_to_string:
+        mov rax, rdi
+        mov rcx, 10
+        div rcx
+        add rdi, 48
+        mov [rdi], rdx
+        xor rax, rax
+        xor rdx, rdx
+        ret
 
 global _start
 
@@ -56,11 +64,14 @@ section .data
 	out_string:			db	"You have input:  "
 	out_string_len:		equ	$ - out_string
         err_string: db "Error with syscall"
-        err_string_len equ $- err_string
+        err_string_len: equ $- err_string
+        bytes_read_string: db "Bytes read: "
+        bytes_read_string_len: equ $ - bytes_read_string
 
 section .bss
 
 	in_char:			resw 1 + 4
+        in_char_string resw 256
 
 section .text
 
@@ -76,8 +87,18 @@ _start:
         write stdout, out_string, out_string_len
         write stdout, in_char, 5
 
-        int_to_string r8, in_char
-        write stdout, in_char, 1
+        write stdout, bytes_read_string, bytes_read_string_len
+
+        mov rdi, r8
+        mov rsi, in_char_string
+        mov rdx, 5
+        call uint_to_string
+        mov [in_char_string], BYTE 0
+        mov [in_char_string + 1], BYTE 0
+        mov [in_char_string + 2], BYTE 0
+        mov [in_char_string + 3], BYTE 0
+        mov [in_char_string + 4], BYTE 0
+        write stdout, in_char_string, 5
 
 	exit 0
 
