@@ -18,6 +18,8 @@ CPU X64
     mov rsi, %2
     mov rdx, %3
     syscall
+    cmp rax, 2
+    jl error
 %endmacro
 
 ; Analog to read(2): ssize_t read(int fildes, void *buf, size_t nbyte)
@@ -27,6 +29,8 @@ CPU X64
     mov rsi, %2
     mov rdx, %3
     syscall
+    cmp rax, 2
+    jl error
 %endmacro
 
 global _start
@@ -52,8 +56,6 @@ _start:
 
 	; read in the character
         read stdin, in_char, 5 ; get 5 bytes from the kernel's buffer (one for the carriage return)
-        cmp rax, 2
-        jl error
 	; show user the output
         write stdout, out_string, out_string_len
         write stdout, in_char, 5
@@ -67,5 +69,5 @@ error:
     write stderr, err_string, err_string_len
     ; exit system call
     mov	rax, syscall_exit
-    xor     rdi, rdi
+    mov rdi, 1
     syscall
