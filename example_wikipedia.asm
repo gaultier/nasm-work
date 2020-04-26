@@ -33,6 +33,12 @@ CPU X64
     jl error
 %endmacro
 
+%macro exit 1
+    mov rdi, %1
+    mov rax, syscall_exit
+    syscall
+%endmacro
+
 global _start
 
 section .data
@@ -60,14 +66,8 @@ _start:
         write stdout, out_string, out_string_len
         write stdout, in_char, 5
 
-	; exit system call
-	mov	rax, syscall_exit
-	xor     rdi, rdi
-	syscall
+	exit 0
 
 error:
     write stderr, err_string, err_string_len
-    ; exit system call
-    mov	rax, syscall_exit
-    mov rdi, 1
-    syscall
+    exit rax
