@@ -30,7 +30,7 @@ CPU X64
     mov rdx, %3
     syscall
     mov rdx, rax,
-    cmp rax, 2
+    cmp rax, 0
     jl error
 %endmacro
 
