@@ -29,6 +29,7 @@ CPU X64
     mov rsi, %2
     mov rdx, %3
     syscall
+    mov rdx, rax,
     cmp rax, 2
     jl error
 %endmacro
@@ -70,4 +71,4 @@ _start:
 
 error:
     write stderr, err_string, err_string_len
-    exit rax
+    exit rdx
