@@ -37,7 +37,7 @@ section .data
 
 section .bss
 
-	in_char:			resw 4
+	in_char:			resw 1 + 4
 
 section .text
 
@@ -46,10 +46,10 @@ _start:
         write stdout, query_string, query_string_len
 
 	; read in the character
-        read stdin, in_char, 2 ; get 2 bytes from the kernel's buffer (one for the carriage return)
+        read stdin, in_char, 5 ; get 5 bytes from the kernel's buffer (one for the carriage return)
 	; show user the output
         write stdout, out_string, out_string_len
-        write stdout, in_char, 2 ; the second byte is to apply the carriage return expected in the string
+        write stdout, in_char, 5
 
 	; exit system call
 	mov	rax, syscall_exit
