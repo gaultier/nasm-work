@@ -89,7 +89,6 @@ fibonacci_iter:
 fibonacci_rec:
     push r8
     push rbx
-    push rax
 
     mov rbx, rdi
 
@@ -112,7 +111,6 @@ fibonacci_rec:
     .end:
         mov rax, rbx
 
-        add rsp, 8 ; pop rax
         pop rbx
         pop r8
 
