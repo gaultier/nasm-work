@@ -9,5 +9,5 @@
 
 .PHONY: clean
 clean:
-	rm *.o *.exe
+	rm -f *.o *.exe
 
