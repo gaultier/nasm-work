@@ -46,7 +46,6 @@ int_to_string:
     .int_to_string_end:
         xor rax, rax
         ret
-    
 
 section .data
     err_string: db "Error with syscall"
