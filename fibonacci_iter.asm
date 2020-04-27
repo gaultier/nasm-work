@@ -18,9 +18,9 @@ DEFAULT REL
     mov rsi, %2
     mov rdx, %3
     syscall
-    mov rdx, rax,
-    cmp rdx, 0
-    jl error
+    ;mov rdx, rax,
+    ;cmp rdx, 0
+    ;jl error
 %endmacro
 
 %macro exit 1
@@ -30,21 +30,32 @@ DEFAULT REL
 %endmacro
 
 int_to_string:
-    xor r8, r8 ; loop index
+    xor r8, r8 ; loop index i
     mov rax, rdi ; rax is the dividend
-    lea rsi, [int_to_string_buf] ; our buffer in a register for relative addressing
+    lea rdi, [int_to_string_buf] ; our buffer in a register for relative addressing
+    mov rsi, rdi ; our buffer in a register for relative addressing
+    add rsi, 255 ; point at the end
     
     .int_to_string_loop:
-        mov rcx, 10 ; rcx is the dividor 
-        div rcx ; get rem in rdx
-        cmp rdx, 0
+        cmp rax, 0 ; while (n != 0)
         jz .int_to_string_end
+
+        mov rcx, 10 ; rcx is the dividor 
+        xor rdx, rdx ; reset rem, otherwise we could get fpe
+        div rcx ;  n /= 10; rdx = rem
+
         add rdx, '0' ; convert to ascii code
-        mov [rsi + r8], rdx 
-        inc r8
+
+        ; *(--end) = rem
+        dec rsi
+        mov [rsi], rdx 
+
+        inc r8 ; i++
+        jmp .int_to_string_loop
 
     .int_to_string_end:
-        xor rax, rax
+        ; return i == strlen(s)
+        mov rax, r8 
         ret
 
 section .data
@@ -59,12 +70,14 @@ section .text
 
 global _start
 _start:
-    mov rdi, 32
+    mov rdi, 456 ; n
     call int_to_string
+    
+    mov r9, rax
+    
+    write stdout, rsi, r9
 
-    write stdout, int_to_string_buf, 2
-
-    exit 0
+    exit r9
 
 error:
     write stderr, err_string, err_string_len
