@@ -88,6 +88,39 @@ fibonacci_iter:
         ; `rax` already contains the right value, `b`
         ret
 
+; rdi=n
+fibonacci_rec:
+    push r8
+    push rbx
+    push rax
+
+    mov rbx, rdi
+
+    cmp rdi, 1
+    jle .end
+
+    dec rbx  ; n-1
+    mov rdi, rbx
+    call fibonacci_rec
+
+    mov r8, rax ; store result in rbx
+    
+    dec rbx ; n-2
+    mov rdi, rbx
+    call fibonacci_rec
+
+    add r8, rax ; sum both results
+
+    mov rax, r8
+
+    .end:
+        mov rax, rbx
+
+        add rsp, 8 ; pop rax
+        pop rbx
+        pop r8
+
+        ret
 
 section .data
     err_string: db "Error with syscall"
@@ -97,20 +130,19 @@ section .bss
 
 section .text
 
-error:
-    write stderr, err_string, err_string_len
-    exit rdx
 
 global _start
 _start:
 
-    mov rdi, 35
-    call fibonacci_iter
-
+    mov rdi, 2
+    call fibonacci_rec
 
     mov rdi, stdout
     mov rsi, rax ; n
     call write_int_to_string
     xor rax, rax
 
-    exit rax
+
+error:
+    write stderr, err_string, err_string_len
+    exit rdx
