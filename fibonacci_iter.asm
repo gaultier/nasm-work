@@ -30,11 +30,12 @@ DEFAULT REL
 
 ; rdi=n
 int_to_string:
+    ; prolog
     push rbp
     mov rbp, rsp
+    ; char s[256];
     sub rsp, 256
-    lea r9, [rbp - 256]
-    ;mov r9, [rbp] ; point at the end
+    lea r9, [rbp - 256] ; point at the end of the buffer
 
     xor r8, r8 ; loop index i
     mov rax, rdi ; rax is the dividend
@@ -61,6 +62,7 @@ int_to_string:
         mov rax, r8 
         write stdout, r9, r8
 
+        ; epilog
         add rsp, 256
         pop rbp
         ret
@@ -71,8 +73,6 @@ section .data
     err_string_len: equ $- err_string
 
 section .bss
-
-    int_to_string_buf resw 256
 
 section .text
 
@@ -88,10 +88,3 @@ _start:
 
     xor rax, rax
     exit rax
-    
-    ;mov r9, rax
-    
-    ;write stdout, rsi, r9
-
-    ;exit r9
-
