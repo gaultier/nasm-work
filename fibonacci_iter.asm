@@ -70,22 +70,22 @@ write_int_to_string:
 
 ; rdi=n
 fibonacci_iter:
-    mov rax, 0 ; a
-    mov rbx, 1 ; b
+    mov rbx, 0 ; a
+    mov rax, 1 ; b
     mov rcx, 1 ; i
 
     .loop:
         cmp rcx, rdi  ; i < n
         jge .end
 
-        mov r8, rbx ; tmp = b
-        add rbx, rax ; b += a
-        mov rax, r8 ; a = tmp
+        mov r8, rax ; tmp = b
+        add rax, rbx ; b += a
+        mov rbx, r8 ; a = tmp
         inc rcx ; i++
         jmp .loop
 
     .end:
-        mov rax, rbx ; return b
+        ; `rax` already contains the right value, `b`
         ret
 
 
