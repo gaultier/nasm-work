@@ -29,7 +29,7 @@ DEFAULT REL
 %endmacro
 
 ; rdi=n
-int_to_string:
+write_int_to_string:
     ; prolog
     push rbp
     mov rbp, rsp
@@ -38,7 +38,7 @@ int_to_string:
     lea r9, [rbp - 256] ; point at the end of the buffer
 
     xor r8, r8 ; loop index i
-    mov rax, rdi ; rax is the dividend
+    mov rax, rsi ; rax is the dividend
 
     .int_to_string_loop:
         cmp rax, 0 ; while (n != 0)
@@ -60,7 +60,7 @@ int_to_string:
     .int_to_string_end:
         ; return i == strlen(s)
         mov rax, r8 
-        write stdout, r9, r8
+        write rdi, r9, r8
 
         ; epilog
         add rsp, 256
@@ -83,8 +83,9 @@ error:
 global _start
 _start:
 
-    mov rdi, 456 ; n
-    call int_to_string
-
+    mov rdi, stdout
+    mov rsi, 456 ; n
+    call write_int_to_string
     xor rax, rax
+
     exit rax
