@@ -17,9 +17,6 @@ DEFAULT REL
     mov rsi, %2
     mov rdx, %3
     syscall
-    mov rdx, rax,
-    cmp rdx, 0
-    jl error
 %endmacro
 
 %macro exit 1
@@ -99,19 +96,18 @@ fibonacci_rec:
     cmp rdi, 1
     jle .end
 
-    dec rbx  ; n-1
     mov rdi, rbx
+    dec rdi  ; n-1
     call fibonacci_rec
 
     mov r8, rax ; store result in rbx
     
-    dec rbx ; n-2
+    add rbx, -2 ; n-2
     mov rdi, rbx
     call fibonacci_rec
 
-    add r8, rax ; sum both results
-
-    mov rax, r8
+    mov rbx, rax
+    add rbx, r8 ; sum both results
 
     .end:
         mov rax, rbx
@@ -123,8 +119,6 @@ fibonacci_rec:
         ret
 
 section .data
-    err_string: db "Error with syscall"
-    err_string_len: equ $- err_string
 
 section .bss
 
@@ -134,7 +128,7 @@ section .text
 global _start
 _start:
 
-    mov rdi, 2
+    mov rdi, 35
     call fibonacci_rec
 
     mov rdi, stdout
@@ -142,7 +136,5 @@ _start:
     call write_int_to_string
     xor rax, rax
 
+    exit rax
 
-error:
-    write stderr, err_string, err_string_len
-    exit rdx
