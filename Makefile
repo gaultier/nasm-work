@@ -1,8 +1,12 @@
+.POSIX:
+
 .SUFFIXES:
 .SUFFIXES: .asm .exe .o
 
+FORMAT = macho64
+
 .asm.o:
-	nasm -f macho64 $<
+	nasm -f $(FORMAT) $<
 
 .o.exe:
 	ld -e _start -static $< -o $@
