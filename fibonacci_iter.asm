@@ -68,6 +68,27 @@ write_int_to_string:
         ret
 
 
+; rdi=n
+fibonacci_iter:
+    mov rax, 0 ; a
+    mov rbx, 1 ; b
+    mov rcx, 1 ; i
+
+    .loop:
+        cmp rcx, rdi  ; i < n
+        jge .end
+
+        mov r8, rbx ; tmp = b
+        add rbx, rax ; b += a
+        mov rax, r8 ; a = tmp
+        inc rcx ; i++
+        jmp .loop
+
+    .end:
+        mov rax, rbx ; return b
+        ret
+
+
 section .data
     err_string: db "Error with syscall"
     err_string_len: equ $- err_string
@@ -83,8 +104,12 @@ error:
 global _start
 _start:
 
+    mov rdi, 35
+    call fibonacci_iter
+
+
     mov rdi, stdout
-    mov rsi, 456 ; n
+    mov rsi, rax ; n
     call write_int_to_string
     xor rax, rax
 
