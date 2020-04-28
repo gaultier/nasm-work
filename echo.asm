@@ -15,10 +15,6 @@ _main:
     mov rbp, rsp
 
     mov rdi, [rsi + 8] ; argv[1]
-    xor rsi, rsi
-    xor rax, rax
-    xor rdx, rdx
-    
     call _puts
 
     xor rax, rax
