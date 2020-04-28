@@ -100,16 +100,6 @@ _start:
 
         write stdout, bytes_read_string, bytes_read_string_len
 
-        ;mov rdi, r8
-        ;mov rsi, in_char_string
-        ;mov rdx, 5
-        ;align 16
-        ;call uint_to_string
-        ;mov [in_char_string], BYTE 0
-        ;mov [in_char_string + 1], BYTE 0
-        ;mov [in_char_string + 2], BYTE 0
-        ;mov [in_char_string + 3], BYTE 0
-        ;mov [in_char_string + 4], BYTE 0
         mov rdi, 5
         mov rsi, in_char_string
         call int_to_char
