@@ -8,13 +8,8 @@ DEFAULT REL
 %define stdout 1
 %define stderr 2
 
-%ifenv LINUX
-%define syscall_exit 60
-%define syscall_write 1
-%else
 %define syscall_exit 0x2000001
 %define syscall_write 0x2000004
-%endif
 
 ; Analog to write(2): ssize_t write(int fildes, const void *buf, size_t nbyte);
 %macro write 3
