@@ -4,7 +4,7 @@
 .SUFFIXES: .nasm .exe .o
 
 FORMAT = macho64
-LDFLAGS = -lc
+LDFLAGS = -lSystem
 
 .nasm.o:
 	nasm -f $(FORMAT) $<
