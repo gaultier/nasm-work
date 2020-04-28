@@ -1,6 +1,6 @@
 # as echo2.asm -o echo2.o && ld -lSystem echo2.o -o echo2.exe
-.section __TEXT,__text
 
+.text
 .globl _main
 _main:
     # prolog
