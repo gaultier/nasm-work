@@ -66,7 +66,7 @@ set_int_to_char:
     mov [rsi], rax
     ret
 
-global main
+global _main
 
 section .data
 
@@ -86,7 +86,7 @@ section .bss
 
 section .text
 
-main:
+_main:
         ; show prompt
         write stdout, query_string, query_string_len
 

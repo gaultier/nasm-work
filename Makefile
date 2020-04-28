@@ -4,12 +4,13 @@
 .SUFFIXES: .nasm .exe .o
 
 FORMAT = macho64
+LDFLAGS = -lc
 
 .nasm.o:
 	nasm -f $(FORMAT) $<
 
 .o.exe:
-	ld -e main -lc $< -o $@
+	$(LD) $(LDFLAGS) $< -o $@
 
 .PHONY: clean
 clean:
