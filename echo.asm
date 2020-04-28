@@ -1,4 +1,4 @@
-; nasm -f macho64 echo.asm && ld -lSystem echo.o -o echo.exe
+; nasm -f macho64 echo.asm && ld -lc echo.o -o echo.exe
 
 BITS 64
 CPU X64

@@ -1,4 +1,4 @@
-# as echo2.asm -o echo2.o && ld -lSystem echo2.o -o echo2.exe
+# as echo2.asm -o echo2.o && ld -lc -e _main echo2.o -o echo2.exe
 
 .text
 .globl _main
