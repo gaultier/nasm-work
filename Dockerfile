@@ -1,7 +1,7 @@
 FROM alpine
 
-RUN apk update && apk add nasm binutils make
+RUN apk update && apk add nasm binutils make musl-dev
 
 WORKDIR /tmp
 
-COPY *.asm Makefile .
+COPY *.nasm Makefile .

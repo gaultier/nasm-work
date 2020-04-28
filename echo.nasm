@@ -6,7 +6,13 @@ DEFAULT REL
 
 section .text
 
-extern _puts
+%ifenv LINUX
+    %define PUTS puts
+%else
+    %define PUTS _puts
+%endif
+
+extern PUTS
 
 global _main
 _main:
@@ -15,7 +21,7 @@ _main:
     mov rbp, rsp
 
     mov rdi, [rsi + 8] ; argv[1]
-    call _puts
+    call PUTS
 
     xor rax, rax
 
