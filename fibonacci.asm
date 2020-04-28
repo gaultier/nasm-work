@@ -129,8 +129,8 @@ section .bss
 section .text
 
 
-global _start
-_start:
+global _main
+_main:
 
     mov rdi, 35
     call fibonacci_rec

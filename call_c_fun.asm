@@ -26,8 +26,8 @@ section .bss
 
 section .text
 
-global _start
-_start:
+global _main
+_main:
     ; prolog
     push rbp
     mov rbp, rsp
