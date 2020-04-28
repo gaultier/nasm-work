@@ -1,5 +1,3 @@
-; nasm -f macho64 echo.asm && ld -lc echo.o -o echo.exe
-
 BITS 64
 CPU X64
 DEFAULT REL
@@ -14,8 +12,8 @@ section .text
 
 extern PUTS
 
-global _main
-_main:
+global main
+main:
     ; prolog
     push rbp
     mov rbp, rsp

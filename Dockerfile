@@ -1,6 +1,6 @@
 FROM alpine
 
-RUN apk update && apk add nasm binutils make musl-dev
+RUN apk update && apk add nasm make gcc musl-dev
 
 WORKDIR /tmp
 

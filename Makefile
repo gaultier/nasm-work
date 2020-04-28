@@ -9,7 +9,7 @@ FORMAT = macho64
 	nasm -f $(FORMAT) $<
 
 .o.exe:
-	ld -e _main -lc $< -o $@
+	ld -e main -lc $< -o $@
 
 .PHONY: clean
 clean:
