@@ -1,11 +1,11 @@
 .POSIX:
 
 .SUFFIXES:
-.SUFFIXES: .asm .exe .o
+.SUFFIXES: .nasm .exe .o
 
 FORMAT = macho64
 
-.asm.o:
+.nasm.o:
 	nasm -f $(FORMAT) $<
 
 .o.exe:
