@@ -8,7 +8,6 @@
 // No stack usage
 // Uses int_to_string_data
 int_to_string:
-
     // Reset the buffer
     movq $0, int_to_string_data+0(%rip)
     movq $0, int_to_string_data+1(%rip)
