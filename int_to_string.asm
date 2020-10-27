@@ -5,10 +5,9 @@
 
 // rdi: integer argumet
 // Returns: void
+// No stack usage
+// Uses int_to_string_data
 int_to_string:
-    // Prolog 
-    push %rbp
-    movq %rsp, %rbp
 
     // Reset the buffer
     movq $0, int_to_string_data+0(%rip)
@@ -56,7 +55,6 @@ int_to_string:
 
     int_to_string_end:
       // Epilog
-      pop %rbp
       ret
     
 
