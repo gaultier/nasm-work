@@ -3,6 +3,8 @@
 
 .text
 
+// rdi: integer argumet
+// Returns: void
 int_to_string:
     // Prolog 
     push %rbp
