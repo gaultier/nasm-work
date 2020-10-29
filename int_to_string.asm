@@ -3,7 +3,7 @@
 
 .text
 
-// rdi: integer argumet
+// rax: integer argumet
 // Returns: void
 // No stack usage
 // Uses int_to_string_data
@@ -33,7 +33,6 @@ int_to_string:
 
     leaq int_to_string_data+21(%rip), %r9 // r9: Point at the end of the buffer
     xorq %r8, %r8 // r8: Loop index
-    movq %rdi, %rax // rax: Dividee
     
     int_to_string_loop:
         cmpq $0, %rax // While dividee != 0
@@ -59,7 +58,7 @@ int_to_string:
 
 .global _main
 _main:
-    movq $789, %rdi
+    movq $789, %rax
     call int_to_string
 
     movq $0x2000004, %rax
@@ -74,7 +73,7 @@ _main:
 
 
 
-    movq $12, %rdi
+    movq $12, %rax
     call int_to_string
 
     movq $0x2000004, %rax
