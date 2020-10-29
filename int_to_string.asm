@@ -3,6 +3,27 @@
 
 .text
 
+print:
+movq %rax, %rsi
+movq %rdi, %rdx
+
+movq $0x2000004, %rax
+movq $1, %rdi
+syscall
+
+movq $0, %rax
+movq $0, %rdi
+movq $0, %rsi
+movq $0, %rdx
+ret
+
+exit_ok:
+movq $0x2000001, %rax
+movq $0, %rdi
+syscall
+ret
+
+
 // rax: integer argumet
 // Returns: void
 // No stack usage
@@ -61,33 +82,17 @@ _main:
     movq $789, %rax
     call int_to_string
 
-    movq $0x2000004, %rax
-    movq $1, %rdi
-    leaq int_to_string_data(%rip), %rsi
-    movq $21, %rdx
-    syscall
-    movq $0, %rax
-    movq $0, %rdi
-    movq $0, %rsi
-    movq $0, %rdx
-
+    leaq int_to_string_data(%rip), %rax
+    movq $21, %rdi
+    call print
 
 
     movq $12, %rax
     call int_to_string
 
-    movq $0x2000004, %rax
-    movq $1, %rdi
-    leaq int_to_string_data(%rip), %rsi
-    movq $21, %rdx
-    syscall
-    movq $0, %rax
-    movq $0, %rdi
-    movq $0, %rsi
-    movq $0, %rdx
+    leaq int_to_string_data(%rip), %rax
+    movq $21, %rdi
+    call print
 
-
-
-    movq $0x2000001, %rax
-    movq $0, %rdi
-    syscall
+        
+    call exit_ok
