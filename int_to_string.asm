@@ -17,13 +17,6 @@ movq $0, %rsi
 movq $0, %rdx
 ret
 
-exit_ok:
-movq $0x2000001, %rax
-movq $0, %rdi
-syscall
-ret
-
-
 // rax: integer argumet
 // Returns: void
 // No stack usage
@@ -94,5 +87,4 @@ _main:
     movq $21, %rdi
     call print
 
-        
-    call exit_ok
+    ret
