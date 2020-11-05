@@ -1,85 +1,49 @@
-.data
-    int_to_string_data: .fill 21, 1, 0
-
 .text
-
-print:
-movq %rax, %rsi
-movq %rdi, %rdx
-
-movq $0x2000004, %rax
-movq $1, %rdi
-syscall
-
-movq $0, %rax
-movq $0, %rdi
-movq $0, %rsi
-movq $0, %rdx
-ret
-
-print_int:
-    call int_to_string
-
-    movq %rax, %rdi // len
-    leaq int_to_string_data(%rip), %rax
-    addq $21, %rax
-    subq %rdi, %rax
-    call print
-    ret
-
 
 // rax: integer argumet
 // Returns: void
 // No stack usage
 // Uses int_to_string_data
-int_to_string:
-    // Reset the buffer
-    movq $0, int_to_string_data+0(%rip)
-    movq $0, int_to_string_data+1(%rip)
-    movq $0, int_to_string_data+2(%rip)
-    movq $0, int_to_string_data+3(%rip)
-    movq $0, int_to_string_data+4(%rip)
-    movq $0, int_to_string_data+5(%rip)
-    movq $0, int_to_string_data+6(%rip)
-    movq $0, int_to_string_data+7(%rip)
-    movq $0, int_to_string_data+8(%rip)
-    movq $0, int_to_string_data+9(%rip)
-    movq $0, int_to_string_data+10(%rip)
-    movq $0, int_to_string_data+11(%rip)
-    movq $0, int_to_string_data+12(%rip)
-    movq $0, int_to_string_data+13(%rip)
-    movq $0, int_to_string_data+14(%rip)
-    movq $0, int_to_string_data+15(%rip)
-    movq $0, int_to_string_data+16(%rip)
-    movq $0, int_to_string_data+17(%rip)
-    movq $0, int_to_string_data+18(%rip)
-    movq $0, int_to_string_data+19(%rip)
-    movq $0, int_to_string_data+20(%rip)
+print_int: 
+    pushq %rbp
+    movq %rsp, %rbp
 
+    subq $32, %rsp // char data[21]
+  
     xorq %r8, %r8 // r8: Loop index and length
+    movq %rsp, %rsi // end ptr
     
     int_to_string_loop:
         cmpq $0, %rax // While n != 0
         jz int_to_string_end
+
+        decq %rsi // end--
 
         // n / 10
         movq $10, %rcx 
         xorq %rdx, %rdx
         idiv %rcx
     
-        // buffer[20-i] = rem + '0'
+        // *end = rem + '0'
         add $48, %rdx // Convert integer to character by adding '0'
-        leaq int_to_string_data(%rip), %r11
-        addq $20, %r11
-        subq %r8,  %r11
-        movb %dl, (%r11)
+        movb %dl, (%rsi)
 
-        incq %r8
+        incq %r8 // len++
         jmp int_to_string_loop
 
     int_to_string_end:
+      movq $0x2000004, %rax
+      movq $1, %rdi
+      movq %r8, %rdx
+      movq %rsp, %rsi
+      subq %r8, %rsi
+
+      syscall
+      xorq %rax, %rax
+
       // Epilog
-      movq %r8, %rax
+      addq $32, %rsp
+      popq %rbp
       ret
     
 
@@ -88,35 +52,13 @@ _main:
     pushq %rbp
     movq %rsp, %rbp
 
+    movq $789, %rax
+    call print_int
 
-    subq $21, %rsp
-    movq $0, %rdx // Len
-    movq %rsp, %rsi // Data ptr
 
-    incq %rsi
-    incq %rdx
-    movb  $55, (%rsi)
-    incq %rsi
-    incq %rdx
-    movb  $56, (%rsi)
+    movq $12, %rax
+    call print_int
 
-    movq $0x2000004, %rax
-    movq $1, %rdi
-    subq %rdx, %rsi
-    movq $3, %rdx
-    syscall
-    xorq %rax, %rax
-
-    addq $21, %rsp
     popq %rbp
-    ret
-
-//    movq $789, %rax
-//    call print_int
-//
-//
-//    movq $12, %rax
-//    call print_int
-
     ret
 
