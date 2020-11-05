@@ -17,6 +17,17 @@ movq $0, %rsi
 movq $0, %rdx
 ret
 
+print_int:
+    call int_to_string
+
+    movq %rax, %rdi // len
+    leaq int_to_string_data(%rip), %rax
+    addq $21, %rax
+    subq %rdi, %rax
+    call print
+    ret
+
+
 // rax: integer argumet
 // Returns: void
 // No stack usage
@@ -45,46 +56,67 @@ int_to_string:
     movq $0, int_to_string_data+19(%rip)
     movq $0, int_to_string_data+20(%rip)
 
-    leaq int_to_string_data+21(%rip), %r9 // r9: Point at the end of the buffer
-    xorq %r8, %r8 // r8: Loop index
+    xorq %r8, %r8 // r8: Loop index and length
     
     int_to_string_loop:
-        cmpq $0, %rax // While dividee != 0
+        cmpq $0, %rax // While n != 0
         jz int_to_string_end
 
-        // Dividee / 10
+        // n / 10
         movq $10, %rcx 
         xorq %rdx, %rdx
-        div %rcx
-
+        idiv %rcx
+    
+        // buffer[20-i] = rem + '0'
         add $48, %rdx // Convert integer to character by adding '0'
-
-        dec %r9 // *(--end) = rem
-        movb %dl, (%r9)
+        leaq int_to_string_data(%rip), %r11
+        addq $20, %r11
+        subq %r8,  %r11
+        movb %dl, (%r11)
 
         incq %r8
         jmp int_to_string_loop
 
     int_to_string_end:
       // Epilog
+      movq %r8, %rax
       ret
     
 
 .global _main
 _main:
-    movq $789, %rax
-    call int_to_string
-
-    leaq int_to_string_data(%rip), %rax
-    movq $21, %rdi
-    call print
+    pushq %rbp
+    movq %rsp, %rbp
 
 
-    movq $12, %rax
-    call int_to_string
+    subq $21, %rsp
+    movq $0, %rdx // Len
+    movq %rsp, %rsi // Data ptr
 
-    leaq int_to_string_data(%rip), %rax
-    movq $21, %rdi
-    call print
+    incq %rsi
+    incq %rdx
+    movb  $55, (%rsi)
+    incq %rsi
+    incq %rdx
+    movb  $56, (%rsi)
+
+    movq $0x2000004, %rax
+    movq $1, %rdi
+    subq %rdx, %rsi
+    movq $3, %rdx
+    syscall
+    xorq %rax, %rax
+
+    addq $21, %rsp
+    popq %rbp
+    ret
+
+//    movq $789, %rax
+//    call print_int
+//
+//
+//    movq $12, %rax
+//    call print_int
 
     ret
+
